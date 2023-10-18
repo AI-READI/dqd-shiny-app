@@ -1,3 +1,4 @@
+library(DataQualityDashboard)
 library(shiny)
 server <- function(input, output, session) {
   observe({
