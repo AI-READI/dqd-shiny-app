@@ -22,7 +22,7 @@ Be default, the Shiny app uses the sample `results.json` from the DataQualityDas
 docker run -d -p 3838:3838 \
 -v /local/path/to/result.json:/container/path/to/result.json \
 -e jsonPath=/container/path/to/result.json \
-dqd_aireadi:test
+dqd-aireadi
 ```
 
 Alternatively, if the `result.json` is available from an URL, use the address for the `jsonPath` environment variable.
@@ -30,5 +30,5 @@ Alternatively, if the `result.json` is available from an URL, use the address fo
 ```
 docker run -d -p 3838:3838 \
 -e jsonPath=https://example.com/result.json \
-dqd_aireadi:test
+dqd-aireadi
 ```
