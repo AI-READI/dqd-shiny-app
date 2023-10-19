@@ -16,7 +16,7 @@ docker run -d -p 3838:3838 dqd-aireadi
 
 To access the app, open a web browser window and visit http://localhost:3838 once it is running.
 
-Be default, the Shiny app uses the sample `results.json` from the DataQualityDashboard library. There are a couple methods to define another result source. The first method is to mount the `results.json` output file from the [`DataQualityDashboard::executeDqChecks`](https://ohdsi.github.io/DataQualityDashboard/) in a volume and set the `jsonPath` environment variable to its location.
+By default, the Shiny app uses the sample `results.json` from the DataQualityDashboard library. There are a couple methods to define another result source. The first method is to mount the `results.json` output file from the [`DataQualityDashboard::executeDqChecks`](https://ohdsi.github.io/DataQualityDashboard/) in a volume and set the `jsonPath` environment variable to its location.
 
 ```
 docker run -d -p 3838:3838 \
