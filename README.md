@@ -11,7 +11,7 @@ docker build -t dqd-aireadi .
 The following command will run the container in the background and serve it on the default port 3838.
 
 ```
-docker run -d -it -p 3838:3838 dqd-aireadi
+docker run -d -p 3838:3838 dqd-aireadi
 ```
 
 To access the app, open a web browser window and visit http://localhost:3838 once it is running.
