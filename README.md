@@ -1,10 +1,34 @@
-# DQD-READAI
+# DataQualityDashboard Shiny App
 
-Repo to store the Docker image that will be used to host the Shiny App for DQD READAI project. The image is based on the `rocker/shiny-verse` image. The base image exposes port 3838, which is where the Shiny app can be accessed on. Currently, it is configured to be run locally as follows:
+This image contains the [Shiny App](https://www.rstudio.com/products/shiny/) for the [DataQualityDashboard](https://github.com/OHDSI/DataQualityDashboard/). It is based on the [`rocker/shiny-verse` image](https://rocker-project.org/images/versioned/shiny.html).
+
+To build the image, use the following command:
 
 ```
-docker build -t dqd_readai:test .
-docker run -it -p 3838:3838 dqd_readai:test
+docker build -t dqd-aireadi .
 ```
 
-To access the app, we can open a web browser window, and visit http://localhost:3838
+The following command will run the container in the background and serve it on the default port 3838.
+
+```
+docker run -d -p 3838:3838 dqd-aireadi
+```
+
+To access the app, open a web browser window and visit http://localhost:3838 once it is running.
+
+By default, the Shiny app uses the sample `results.json` from the DataQualityDashboard library. There are a couple methods to define another result source. The first method is to mount the `results.json` output file from the [`DataQualityDashboard::executeDqChecks`](https://ohdsi.github.io/DataQualityDashboard/) in a volume and set the `jsonPath` environment variable to its location.
+
+```
+docker run -d -p 3838:3838 \
+-v /local/path/to/result.json:/container/path/to/result.json \
+-e jsonPath=/container/path/to/result.json \
+dqd-aireadi
+```
+
+Alternatively, if the `result.json` is available from an URL, use the address for the `jsonPath` environment variable.
+
+```
+docker run -d -p 3838:3838 \
+-e jsonPath=https://example.com/result.json \
+dqd-aireadi
+```
