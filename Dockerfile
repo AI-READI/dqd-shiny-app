@@ -8,5 +8,7 @@ RUN apt update; \
     R -e "remotes::install_github('OHDSI/DataQualityDashboard')"; \
     cp -r /usr/local/lib/R/site-library/DataQualityDashboard/shinyApps/* /srv/shiny-server/
 
+COPY index.html /srv/shiny-server/www/index.html
+
 #This environment variable is included for testing purpose.
 ENV jsonPath="/srv/shiny-server/www/results.json"
