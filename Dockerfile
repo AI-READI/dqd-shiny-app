@@ -1,4 +1,4 @@
-FROM rocker/shiny-verse:latest
+FROM rocker/shiny-verse:4.2
 
 RUN rm -r /srv/shiny-server/*;
 RUN apt update; \
