@@ -1,0 +1,69 @@
+# Workflow to build shiny-dqd and deploy to azure container app staging env
+# 
+# To configure this workflow:
+# 1. Set up the following secrets in your repository:
+# 2. Change env variables for your environment-specific configuration.
+# 3. Add secrets to env-specific configuration
+#
+# remote actions used in this workflow:
+#   - GitHub Actions for Azure: https://github.com/Azure/Actions
+#   - Azure Functions Action: https://github.com/Azure/functions-action
+#   - Publish Profile: https://github.com/Azure/functions-action#using-publish-profile-as-deployment-credential-recommended
+#   - Azure CLI from github actions: 
+#
+# For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples/tree/master/FunctionApp
+
+name: Staging deploy shiny-dqd-dash to Azure Container App
+
+on:
+  workflow_dispatch:
+
+env:
+    AZURE_CONTAINERAPP_NAME: 'b2ai-omop-shiny-dqd'
+    AZURE_RESOURCEGROUP_NAME: 'B2AI-OT2'
+    AZURE_CONTAINERAPP_DEPLOYMENT_SLOT: 'b2ai-omop-'
+    AZURE_CONTAINERAPP_PACKAGE_PATH: '.'
+    
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+        environment: Production
+        steps:
+            - name: 'Checkout GitHub Action'
+              uses: actions/checkout@v3
+
+            - name: 'Log in to Azure CLI'
+              uses: azure/login@v1
+              with:
+                  creds: ${{ secrets.AZURE_CREDENTIALS }}
+            
+            - name: 'build and push image to ACR'
+              uses: azure/docker-login@v1
+              with:
+                login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+                username: ${{ secrets.REGISTRY_USERNAME }}
+                password: ${{ secrets.REGISTRY_PASSWORD }}
+            - run: |
+                docker build . -t --tag dqd-shiny-app:$(date +%s)${{ github.sha }}
+                docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.AZURE_CONTAINERAPP_NAME }}:${{ secrets.AZURE_CONTAINERAPP_DEPLOYMENT_SLOT }}${{ github.sha }}
+
+            - name: 'Build and push image'
+              uses: azure/container-apps-deploy-action@v1
+              with:
+                acrName: 
+                containerAppName: my-container-app
+                resourceGroup: my-rg
+                imageToDeploy: myregistry.azurecr.io/app:${{ github.sha }}
+            
+            - name: 'Deploy to Azure Container Instances'
+              uses: 'azure/aci-deploy@v1'
+              with:
+                resource-group: ${{ secrets.RESOURCE_GROUP }}
+                dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
+                image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
+                registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+                registry-username: ${{ secrets.REGISTRY_USERNAME }}
+                registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+                name: omop-dqd-shiny
+                location: 'west us'
+                
