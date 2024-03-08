@@ -36,6 +36,12 @@ jobs:
               uses: azure/login@v1
               with:
                   creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+            - name: Azure CLI script
+              uses: azure/cli@v2
+              with:
+                inlineScript: |
+                  az storage copy -s ${{ secrets.ASC_DQD_PATH }} -d ./results.json
             
             - name: 'build and push image to ACR'
               uses: azure/docker-login@v1

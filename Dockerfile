@@ -9,6 +9,7 @@ RUN apt update; \
     cp -r /usr/local/lib/R/site-library/DataQualityDashboard/shinyApps/* /srv/shiny-server/
 
 COPY index.html /srv/shiny-server/www/index.html
+COPY results.json /srv/shiny-server/www/results.json
 
 #This environment variable is included for testing purpose.
 ENV jsonPath="/srv/shiny-server/www/results.json"
