@@ -41,7 +41,7 @@ jobs:
               uses: azure/cli@v2
               with:
                 inlineScript: |
-                  az storage copy -s ${{ secrets.ASC_DQD_PATH }} -d ./results.json
+                  az storage copy -s ${{ secrets.ASC_DQD_PATH }} -d $GITHUB_WORKSPACE/results.json
             
             - name: 'build and push image to ACR'
               uses: azure/docker-login@v1
