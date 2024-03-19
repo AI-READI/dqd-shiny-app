@@ -45,7 +45,7 @@ jobs:
                 username: ${{ secrets.REGISTRY_USERNAME }}
                 password: ${{ secrets.REGISTRY_PASSWORD }}
             - run: |
-                docker build . -t --tag dqd-shiny-app:$(date +%s)${{ github.sha }}
+                docker build . --tag dqd-shiny-app:$(date +%s)${{ github.sha }}
                 docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.AZURE_CONTAINERAPP_NAME }}:${{ secrets.AZURE_CONTAINERAPP_DEPLOYMENT_SLOT }}${{ github.sha }}
 
             - name: 'Build and push image'
