@@ -46,15 +46,7 @@ jobs:
                 password: ${{ secrets.REGISTRY_PASSWORD }}
             - run: |
                 docker build . --tag dqd-shiny-app:$(date +%s)${{ github.sha }}
-                docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ secrets.AZURE_CONTAINERAPP_NAME }}:${{ secrets.AZURE_CONTAINERAPP_DEPLOYMENT_SLOT }}${{ github.sha }}
-
-            - name: 'Build and push image'
-              uses: azure/container-apps-deploy-action@v1
-              with:
-                acrName: 
-                containerAppName: my-container-app
-                resourceGroup: my-rg
-                imageToDeploy: myregistry.azurecr.io/app:${{ github.sha }}
+                docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_CONTAINERAPP_NAME }}:${{ env.AZURE_CONTAINERAPP_DEPLOYMENT_SLOT }}${{ github.sha }}
             
             - name: 'Deploy to Azure Container Instances'
               uses: 'azure/aci-deploy@v1'
