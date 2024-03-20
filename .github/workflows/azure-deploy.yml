@@ -48,6 +48,13 @@ jobs:
                 docker build . --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_CONTAINERAPP_NAME }}:${{ github.sha }}
                 docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_CONTAINERAPP_NAME }}:${{ github.sha }}
             
+            - name: 'azure login'
+              uses: azure/login@v2
+              with:
+                client-id: ${{ secrets.AZURE_PRINCIPAL_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            
             - name: 'Deploy to Azure Container Instances'
               uses: 'azure/aci-deploy@v1'
               with:
