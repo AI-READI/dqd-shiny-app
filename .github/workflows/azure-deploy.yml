@@ -45,8 +45,8 @@ jobs:
                 username: ${{ secrets.REGISTRY_USERNAME }}
                 password: ${{ secrets.REGISTRY_PASSWORD }}
             - run: |
-                docker build . --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_CONTAINERAPP_NAME }}:$(date +%s)${{ github.sha }}
-                docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_CONTAINERAPP_NAME }}:$(date +%s)${{ github.sha }}
+                docker build . --tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_CONTAINERAPP_NAME }}:${{ github.sha }}
+                docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/${{ env.AZURE_CONTAINERAPP_NAME }}:${{ github.sha }}
             
             - name: 'Deploy to Azure Container Instances'
               uses: 'azure/aci-deploy@v1'
